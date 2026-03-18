@@ -2,117 +2,166 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Дослід №1: Хімічна та електрохімічна корозія цинку</title>
+    <title>Лабораторний дослід №1: Корозія цинку</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; padding: 20px; color: #2c3e50; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; padding: 20px; color: #2c3e50; line-height: 1.6; }
         .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .user-info { background: #e8f8f5; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 2px solid #1abc9c; text-align: center; }
-        .user-info input { padding: 10px; border-radius: 6px; border: 1px solid #bdc3c7; width: 300px; font-size: 1em; }
-        .lab-content { opacity: 0.3; pointer-events: none; transition: 0.5s; }
+        
+        .user-info { background: #fff9db; padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 2px solid #f1c40f; text-align: center; }
+        .user-info input { padding: 12px; border-radius: 6px; border: 1px solid #bdc3c7; width: 320px; font-size: 1.1em; outline: none; }
+
+        .lab-content { opacity: 0.3; pointer-events: none; transition: 0.5s opacity; }
         .lab-active { opacity: 1; pointer-events: auto; }
-        .intro-section { border-bottom: 2px solid #e67e22; margin-bottom: 20px; padding-bottom: 10px; }
-        .aim-box { background: #fffcf9; padding: 15px; border-radius: 8px; border-left: 5px solid #e67e22; font-size: 0.95em; }
-        .controls { text-align: center; margin: 25px 0; }
-        .lab-bench { display: flex; justify-content: center; gap: 100px; padding: 30px; background: #fafafa; border-radius: 10px; }
+
+        .intro-section { border-bottom: 2px solid #e67e22; margin-bottom: 25px; padding-bottom: 15px; }
+        .intro-section h1 { color: #d35400; margin-top: 0; text-align: center; }
+        .aim-box { background: #f4f7f9; padding: 15px; border-radius: 8px; border-left: 5px solid #3498db; margin: 15px 0; }
+
+        .controls { background: #fdfdfd; padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: center; border: 1px solid #eee; }
+        .lab-bench { display: flex; justify-content: center; gap: 80px; margin-top: 10px; padding: 20px; background: #fafafa; border-radius: 10px; }
         .tube-container { display: flex; flex-direction: column; align-items: center; width: 220px; }
-        .tube { width: 80px; height: 240px; border: 3px solid #bdc3c7; border-top: none; border-radius: 0 0 40px 40px; position: relative; background: rgba(255,255,255,0.9); overflow: hidden; }
-        .acid { position: absolute; bottom: 0; width: 100%; height: 0%; background: rgba(52, 152, 219, 0.15); transition: height 1s; }
-        .zinc { width: 30px; height: 30px; background: #95a5a6; border-radius: 4px; position: absolute; bottom: 10px; left: 25px; z-index: 2; transition: 0.5s; border: 1px solid #7f8c8d; }
-        .copper { width: 8px; height: 180px; background: #d35400; position: absolute; bottom: -200px; left: 36px; z-index: 3; transition: bottom 1s ease-in-out; border-radius: 2px; }
-        .copper::after { content: 'Cu'; position: absolute; top: -20px; left: -5px; color: #d35400; font-weight: bold; font-size: 0.8em; }
-        .bubbles { position: absolute; width: 100%; height: 100%; display: none; z-index: 4; }
-        .bubble { background: rgba(255,255,255,0.9); border-radius: 50%; position: absolute; animation: rise 1.2s infinite ease-out; opacity: 0; box-shadow: 0 0 2px white; }
-        @keyframes rise { 0% { bottom: 20px; opacity: 0; transform: scale(0.5); } 20% { opacity: 1; } 100% { bottom: 150px; opacity: 0; transform: scale(1.1); } }
-        button { padding: 12px 20px; background: #2c3e50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin: 5px; }
+        
+        .tube { width: 80px; height: 250px; border: 3px solid #bdc3c7; border-top: none; 
+                border-radius: 0 0 40px 40px; position: relative; background: rgba(255,255,255,0.9); overflow: hidden; }
+        .liquid { position: absolute; bottom: 0; width: 100%; height: 0%; transition: height 1s, background 2s; z-index: 1; }
+        
+        .zinc-granule { width: 38px; height: 28px; background: #95a5a6; position: absolute; bottom: 8px; left: 21px; z-index: 3; border-radius: 40% 60% 50% 50%; display: none; box-shadow: inset -3px -3px 6px rgba(0,0,0,0.4); }
+        .copper-wire { width: 5px; height: 185px; background: #d35400; position: absolute; bottom: 12px; left: 52px; z-index: 4; display: none; transform: rotate(-4deg); }
+
+        .bubbles { position: absolute; width: 100%; display: none; z-index: 5; }
+        .bubble { width: 5px; height: 5px; background: white; border: 0.5px solid #eee; border-radius: 50%; position: absolute; animation: rise 1s infinite ease-in; opacity: 0; }
+        @keyframes rise { 0% { bottom: 0; opacity: 0; } 30% { opacity: 1; } 100% { bottom: 130px; opacity: 0; transform: translateX(8px); } }
+
+        button { margin: 5px; padding: 12px 18px; cursor: pointer; background: #34495e; color: white; border: none; border-radius: 6px; font-weight: bold; transition: 0.3s; }
+        button:hover:not(:disabled) { background: #2c3e50; transform: translateY(-2px); }
         button:disabled { background: #ecf0f1; color: #bdc3c7; cursor: not-allowed; }
-        .report { margin-top: 30px; padding: 25px; border: 2px solid #e67e22; border-radius: 12px; display: none; background: #fff; }
+
+        .report-tasks { margin-top: 30px; text-align: left; background: #fff; padding: 25px; border-radius: 12px; border: 2px solid #e67e22; display: none; }
+        .example-box { background: #fef9e7; padding: 20px; border-radius: 10px; margin: 15px 0; border-left: 5px solid #f1c40f; }
+        .example-eq { font-family: 'Courier New', monospace; font-weight: bold; color: #d35400; font-size: 1.1em; display: block; margin: 5px 0; }
+        
+        .signature-line { margin-top: 30px; padding-top: 15px; border-top: 1px solid #eee; text-align: right; font-style: italic; color: #7f8c8d; }
+        .student-name-display { color: #2c3e50; font-weight: bold; border-bottom: 1px solid #2c3e50; }
     </style>
 </head>
 <body>
+
 <div class="container">
     <div class="user-info">
-        <label><b>Прізвище та Ім'я студента:</b></label><br><br>
-        <input type="text" id="studentName" placeholder="Введіть дані..." oninput="checkName()">
+        <label><b>Введіть Прізвище та Ім'я для розблокування:</b></label><br><br>
+        <input type="text" id="studentName" placeholder="Ваше прізвище..." oninput="checkName()">
     </div>
+
     <div id="labWrapper" class="lab-content">
         <div class="intro-section">
-            <h1>Дослід №1: Хімічна та електрохімічна корозія цинку</h1>
+            <h1>Лабораторний дослід №1</h1>
             <div class="aim-box">
-                <strong>Мета:</strong> Порівняти швидкість виділення водню при корозії чистого цинку та цинку в контакті з міддю в розчині сульфатної кислоти.
+                <strong>Мета дослідження:</strong> Порівняти швидкість хімічної корозії цинку в розчині сульфатної кислоти з його електрохімічною корозією при контакті з міддю; навчитися складати схеми гальванічних елементів та електронні рівняння процесів.
             </div>
         </div>
+        
         <div class="controls">
-            <button id="step1" onclick="addAcid()">1. Налити H₂SO₄</button>
-            <button id="step2" onclick="addCopper()" disabled>2. Занурити мідний дріт у пр. №2</button>
+            <button id="step1" onclick="addAcid()">1. Налити H<sub>2</sub>SO<sub>4</sub></button>
+            <button id="step2" onclick="addZn()" disabled>2. Опустити Zn</button>
+            <button id="step3" onclick="addZnCu()" disabled>3. Контакт з Cu (Пр. 2)</button>
+            <button onclick="location.reload()" style="background:#c0392b">Скинути</button>
         </div>
+
         <div class="lab-bench">
             <div class="tube-container">
                 <div class="tube">
-                    <div class="acid" id="a1"></div>
-                    <div class="zinc"></div>
-                    <div class="bubbles" id="b1" style="display:block; opacity:0"></div>
+                    <div class="liquid" id="liq1"></div>
+                    <div class="zinc-granule" id="zn1"></div>
+                    <div class="bubbles" id="b1" style="bottom: 30px; height: 100px;"></div>
                 </div>
-                <p><b>Пробірка №1</b> (Zn)</p>
+                <div class="label">Пробірка №1 (Хімічна)</div>
             </div>
             <div class="tube-container">
                 <div class="tube">
-                    <div class="acid" id="a2"></div>
-                    <div class="zinc"></div>
-                    <div class="copper" id="cu"></div>
-                    <div class="bubbles" id="b2"></div>
+                    <div class="liquid" id="liq2"></div>
+                    <div class="zinc-granule" id="zn2"></div>
+                    <div class="copper-wire" id="cu2"></div>
+                    <div class="bubbles" id="b2" style="bottom: 30px; height: 160px;"></div>
                 </div>
-                <p><b>Пробірка №2</b> (Zn + Cu)</p>
+                <div class="label">Пробірка №2 (Електрохімічна)</div>
             </div>
         </div>
-        <div id="report" class="report">
-            <h3>ЗВІТ З РОБОТИ</h3>
-            <p><b>Спостереження:</b></p>
+
+        <div class="report-tasks" id="report">
+            <h3>ЕЛЕКТРОННИЙ ЗВІТ З РОБОТИ</h3>
+            
+            <p><strong>Мета:</strong> Порівняння швидкості корозії цинку при утворенні гальванічної пари.</p>
+
+            <p><b>1. Зразок оформлення (перепишіть у зошит):</b></p>
+            <div class="example-box">
+                Схема гальванічного елемента:<br>
+                <span class="example-eq">A(-) Zn | H<sub>2</sub>SO<sub>4</sub> | Cu (+)K</span>
+                Анодний процес (Zn): <span class="example-eq">Zn<sup>0</sup> - 2e<sup>-</sup> &rarr; Zn<sup>2+</sup></span>
+                Катодний процес (Cu): <span class="example-eq">2H<sup>+</sup> + 2e<sup>-</sup> &rarr; H<sub>2</sub><sup>0</sup>&uarr;</span>
+                Повне рівняння: <span class="example-eq">Zn + H<sub>2</sub>SO<sub>4</sub> &rarr; ZnSO<sub>4</sub> + H<sub>2</sub>&uarr;</span>
+            </div>
+
+            <p><b>2. Контрольні запитання:</b></p>
             <ul>
-                <li>У пробірці №1 водень виділяється помірно на поверхні цинку.</li>
-                <li>Після занурення міді у пробірку №2, водень починає інтенсивно виділятися на <b>мідній проволоці</b>.</li>
+                <li>Чому бульбашки газу почали виділятися інтенсивніше після торкання цинку мідним дротом?</li>
+                <li>На якому металі (Zn чи Cu) відбувалося відновлення іонів Гідрогену в другій пробірці?</li>
+                <li>Який метал у парі Zn-Cu руйнується (кородує), а який захищений?</li>
             </ul>
-            <p><b>Висновок:</b> Контакт з менш активним металом (Cu) прискорює корозію більш активного металу (Zn).</p>
-            <div style="text-align: right; font-style: italic; border-top: 1px solid #eee; padding-top: 10px;">
-                Роботу виконав(ла): <span id="displayName" style="color: #e67e22; font-weight: bold;"></span>
+
+            <div class="signature-line">
+                Роботу виконав(ла): <span id="displayName" class="student-name-display"></span>
             </div>
         </div>
     </div>
 </div>
+
 <script>
     function checkName() {
-        const val = document.getElementById('studentName').value;
-        if (val.trim().length >= 3) document.getElementById('labWrapper').classList.add('lab-active');
+        const nameVal = document.getElementById('studentName').value;
+        const wrapper = document.getElementById('labWrapper');
+        if (nameVal.trim().length >= 3) { wrapper.classList.add('lab-active'); }
+        else { wrapper.classList.remove('lab-active'); }
     }
+
     function addAcid() {
-        document.getElementById('a1').style.height = '60%';
-        document.getElementById('a2').style.height = '60%';
-        setTimeout(() => {
-            document.getElementById('b1').style.opacity = '1';
-            createBubbles('b1', 8, 35);
-        }, 1000);
+        document.getElementById('liq1').style.height = '60%';
+        document.getElementById('liq2').style.height = '60%';
+        document.getElementById('liq1').style.background = 'rgba(230, 240, 255, 0.5)';
+        document.getElementById('liq2').style.background = 'rgba(230, 240, 255, 0.5)';
         document.getElementById('step1').disabled = true;
         document.getElementById('step2').disabled = false;
     }
-    function addCopper() {
-        document.getElementById('cu').style.bottom = '15px';
-        setTimeout(() => {
-            document.getElementById('b2').style.display = 'block';
-            createBubbles('b2', 25, 38);
-            document.getElementById('report').style.display = 'block';
-            document.getElementById('displayName').innerText = document.getElementById('studentName').value;
-        }, 800);
+
+    function addZn() {
+        document.getElementById('zn1').style.display = 'block';
+        document.getElementById('zn2').style.display = 'block';
+        document.getElementById('b1').style.display = 'block';
+        document.getElementById('b2').style.display = 'block';
+        generateBubbles('b1', 25, 32, 12, 1.2); 
+        generateBubbles('b2', 25, 32, 12, 1.2); 
         document.getElementById('step2').disabled = true;
+        document.getElementById('step3').disabled = false;
     }
-    function createBubbles(id, count, xBase) {
+
+    function addZnCu() {
+        document.getElementById('cu2').style.display = 'block';
+        document.getElementById('b2').innerHTML = '';
+        generateBubbles('b2', 65, 52, 165, 0.6); 
+        document.getElementById('displayName').innerText = document.getElementById('studentName').value;
+        document.getElementById('report').style.display = 'block';
+        setTimeout(() => { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }, 300);
+        document.getElementById('step3').disabled = true;
+    }
+
+    function generateBubbles(id, count, xPos, yRange, speed) {
         const container = document.getElementById(id);
         for (let i = 0; i < count; i++) {
             let b = document.createElement('div');
             b.className = 'bubble';
-            b.style.width = (3 + Math.random() * 4) + 'px';
-            b.style.height = b.style.width;
-            b.style.left = (xBase + (Math.random() * 10 - 5)) + 'px';
-            b.style.animationDuration = (0.8 + Math.random() * 0.7) + 's';
-            b.style.animationDelay = (Math.random() * 1.5) + 's';
+            b.style.left = (xPos + (Math.random() * 8 - 4)) + 'px'; 
+            b.style.bottom = (Math.random() * yRange) + 'px';
+            b.style.animationDuration = (speed + Math.random() * 0.4) + 's';
+            b.style.animationDelay = Math.random() * 2 + 's';
             container.appendChild(b);
         }
     }
