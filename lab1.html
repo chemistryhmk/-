@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Лабораторний дослід №1: Корозія заліза</title>
+    <title>Дослід №1: Хімічна та електрохімічна корозія цинку</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; padding: 20px; color: #2c3e50; }
         .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
@@ -10,20 +10,22 @@
         .user-info input { padding: 10px; border-radius: 6px; border: 1px solid #bdc3c7; width: 300px; font-size: 1em; }
         .lab-content { opacity: 0.3; pointer-events: none; transition: 0.5s; }
         .lab-active { opacity: 1; pointer-events: auto; }
-        .intro-section { border-bottom: 2px solid #3498db; margin-bottom: 20px; padding-bottom: 10px; }
-        .aim-box { background: #f4f7f9; padding: 15px; border-radius: 8px; border-left: 5px solid #3498db; font-size: 0.95em; }
-        .lab-bench { display: flex; justify-content: space-around; padding: 20px; background: #fafafa; border-radius: 10px; margin-top: 20px; }
-        .tube-container { display: flex; flex-direction: column; align-items: center; width: 200px; }
-        .tube { width: 70px; height: 220px; border: 3px solid #bdc3c7; border-top: none; border-radius: 0 0 35px 35px; position: relative; background: rgba(255,255,255,0.9); overflow: hidden; }
-        .liquid { position: absolute; bottom: 0; width: 100%; height: 65%; transition: background 1s; }
-        .nail { width: 10px; height: 150px; background: #95a5a6; position: absolute; bottom: 15px; left: 28px; transition: 2s; border-radius: 2px; z-index: 2; }
-        .bubbles { position: absolute; width: 100%; height: 100%; display: none; z-index: 3; }
-        .bubble { background: rgba(255,255,255,0.8); border-radius: 50%; position: absolute; animation: rise 1.5s infinite ease-out; opacity: 0; }
-        @keyframes rise { 0% { bottom: 20px; opacity: 0; transform: scale(0.5); } 20% { opacity: 1; } 100% { bottom: 140px; opacity: 0; transform: scale(1.2); } }
+        .intro-section { border-bottom: 2px solid #e67e22; margin-bottom: 20px; padding-bottom: 10px; }
+        .aim-box { background: #fffcf9; padding: 15px; border-radius: 8px; border-left: 5px solid #e67e22; font-size: 0.95em; }
         .controls { text-align: center; margin: 25px 0; }
-        button { padding: 12px 30px; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.1em; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        button:hover { background: #2980b9; }
-        .report-box { margin-top: 30px; padding: 20px; border: 2px solid #3498db; border-radius: 12px; display: none; background: #fff; }
+        .lab-bench { display: flex; justify-content: center; gap: 100px; padding: 30px; background: #fafafa; border-radius: 10px; }
+        .tube-container { display: flex; flex-direction: column; align-items: center; width: 220px; }
+        .tube { width: 80px; height: 240px; border: 3px solid #bdc3c7; border-top: none; border-radius: 0 0 40px 40px; position: relative; background: rgba(255,255,255,0.9); overflow: hidden; }
+        .acid { position: absolute; bottom: 0; width: 100%; height: 0%; background: rgba(52, 152, 219, 0.15); transition: height 1s; }
+        .zinc { width: 30px; height: 30px; background: #95a5a6; border-radius: 4px; position: absolute; bottom: 10px; left: 25px; z-index: 2; transition: 0.5s; border: 1px solid #7f8c8d; }
+        .copper { width: 8px; height: 180px; background: #d35400; position: absolute; bottom: -200px; left: 36px; z-index: 3; transition: bottom 1s ease-in-out; border-radius: 2px; }
+        .copper::after { content: 'Cu'; position: absolute; top: -20px; left: -5px; color: #d35400; font-weight: bold; font-size: 0.8em; }
+        .bubbles { position: absolute; width: 100%; height: 100%; display: none; z-index: 4; }
+        .bubble { background: rgba(255,255,255,0.9); border-radius: 50%; position: absolute; animation: rise 1.2s infinite ease-out; opacity: 0; box-shadow: 0 0 2px white; }
+        @keyframes rise { 0% { bottom: 20px; opacity: 0; transform: scale(0.5); } 20% { opacity: 1; } 100% { bottom: 150px; opacity: 0; transform: scale(1.1); } }
+        button { padding: 12px 20px; background: #2c3e50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin: 5px; }
+        button:disabled { background: #ecf0f1; color: #bdc3c7; cursor: not-allowed; }
+        .report { margin-top: 30px; padding: 25px; border: 2px solid #e67e22; border-radius: 12px; display: none; background: #fff; }
     </style>
 </head>
 <body>
@@ -34,43 +36,44 @@
     </div>
     <div id="labWrapper" class="lab-content">
         <div class="intro-section">
-            <h1>Дослід №1: Корозія заліза в різних середовищах</h1>
+            <h1>Дослід №1: Хімічна та електрохімічна корозія цинку</h1>
             <div class="aim-box">
-                <strong>Мета:</strong> Визначити, у якому середовищі (вода, сіль чи кислота) залізо руйнується найшвидше.
+                <strong>Мета:</strong> Порівняти швидкість виділення водню при корозії чистого цинку та цинку в контакті з міддю в розчині сульфатної кислоти.
             </div>
         </div>
         <div class="controls">
-            <button id="mainBtn" onclick="runExperiment()">Запустити дослід</button>
+            <button id="step1" onclick="addAcid()">1. Налити H₂SO₄</button>
+            <button id="step2" onclick="addCopper()" disabled>2. Занурити мідний дріт у пр. №2</button>
         </div>
         <div class="lab-bench">
             <div class="tube-container">
                 <div class="tube">
-                    <div class="liquid" style="background: rgba(52, 152, 219, 0.1);"></div>
-                    <div class="nail" id="n1"></div>
+                    <div class="acid" id="a1"></div>
+                    <div class="zinc"></div>
+                    <div class="bubbles" id="b1" style="display:block; opacity:0"></div>
                 </div>
-                <p><b>1. Дистильована вода</b></p>
+                <p><b>Пробірка №1</b> (Zn)</p>
             </div>
             <div class="tube-container">
                 <div class="tube">
-                    <div class="liquid" style="background: rgba(52, 152, 219, 0.25);"></div>
-                    <div class="nail" id="n2"></div>
+                    <div class="acid" id="a2"></div>
+                    <div class="zinc"></div>
+                    <div class="copper" id="cu"></div>
+                    <div class="bubbles" id="b2"></div>
                 </div>
-                <p><b>2. Розчин NaCl</b></p>
-            </div>
-            <div class="tube-container">
-                <div class="tube">
-                    <div class="liquid" id="liq3" style="background: rgba(231, 76, 60, 0.1);"></div>
-                    <div class="nail" id="n3"></div>
-                    <div class="bubbles" id="b3"></div>
-                </div>
-                <p><b>3. Розчин HCl</b></p>
+                <p><b>Пробірка №2</b> (Zn + Cu)</p>
             </div>
         </div>
-        <div class="report-box" id="report">
-            <h3>РЕЗУЛЬТАТИ ДОСЛІДЖЕННЯ</h3>
-            <p>У пробірці з <b>кислотою (HCl)</b> спостерігається інтенсивне виділення водню. У <b>солоній воді</b> корозія відбувається значно швидше, ніж у дистильованій.</p>
-            <div style="text-align: right; margin-top: 20px; font-style: italic; border-top: 1px solid #eee; padding-top: 10px;">
-                Роботу виконав(ла): <span id="displayName" style="color: #2980b9; font-weight: bold;"></span>
+        <div id="report" class="report">
+            <h3>ЗВІТ З РОБОТИ</h3>
+            <p><b>Спостереження:</b></p>
+            <ul>
+                <li>У пробірці №1 водень виділяється помірно на поверхні цинку.</li>
+                <li>Після занурення міді у пробірку №2, водень починає інтенсивно виділятися на <b>мідній проволоці</b>.</li>
+            </ul>
+            <p><b>Висновок:</b> Контакт з менш активним металом (Cu) прискорює корозію більш активного металу (Zn).</p>
+            <div style="text-align: right; font-style: italic; border-top: 1px solid #eee; padding-top: 10px;">
+                Роботу виконав(ла): <span id="displayName" style="color: #e67e22; font-weight: bold;"></span>
             </div>
         </div>
     </div>
@@ -80,31 +83,36 @@
         const val = document.getElementById('studentName').value;
         if (val.trim().length >= 3) document.getElementById('labWrapper').classList.add('lab-active');
     }
-    function runExperiment() {
-        // Пробірка 1 - легка іржа
-        document.getElementById('n1').style.background = '#b87333';
-        // Пробірка 2 - сильна іржа
-        document.getElementById('n2').style.background = '#8b4513';
-        document.getElementById('n2').style.boxShadow = '0 0 10px #d35400';
-        // Пробірка 3 - реакція з кислотою
-        document.getElementById('n3').style.background = '#7f8c8d';
-        document.getElementById('b3').style.display = 'block';
-        createBubbles();
-        
-        document.getElementById('mainBtn').disabled = true;
-        document.getElementById('mainBtn').innerText = "Дослід завершено";
-        document.getElementById('displayName').innerText = document.getElementById('studentName').value;
-        document.getElementById('report').style.display = 'block';
+    function addAcid() {
+        document.getElementById('a1').style.height = '60%';
+        document.getElementById('a2').style.height = '60%';
+        setTimeout(() => {
+            document.getElementById('b1').style.opacity = '1';
+            createBubbles('b1', 8, 35);
+        }, 1000);
+        document.getElementById('step1').disabled = true;
+        document.getElementById('step2').disabled = false;
     }
-    function createBubbles() {
-        const container = document.getElementById('b3');
-        for (let i = 0; i < 15; i++) {
+    function addCopper() {
+        document.getElementById('cu').style.bottom = '15px';
+        setTimeout(() => {
+            document.getElementById('b2').style.display = 'block';
+            createBubbles('b2', 25, 38);
+            document.getElementById('report').style.display = 'block';
+            document.getElementById('displayName').innerText = document.getElementById('studentName').value;
+        }, 800);
+        document.getElementById('step2').disabled = true;
+    }
+    function createBubbles(id, count, xBase) {
+        const container = document.getElementById(id);
+        for (let i = 0; i < count; i++) {
             let b = document.createElement('div');
             b.className = 'bubble';
-            b.style.width = (4 + Math.random() * 4) + 'px';
+            b.style.width = (3 + Math.random() * 4) + 'px';
             b.style.height = b.style.width;
-            b.style.left = (25 + Math.random() * 15) + 'px';
-            b.style.animationDelay = (Math.random() * 2) + 's';
+            b.style.left = (xBase + (Math.random() * 10 - 5)) + 'px';
+            b.style.animationDuration = (0.8 + Math.random() * 0.7) + 's';
+            b.style.animationDelay = (Math.random() * 1.5) + 's';
             container.appendChild(b);
         }
     }
