@@ -14,59 +14,66 @@
         .aim-box { background: #f4f7f9; padding: 15px; border-radius: 8px; border-left: 5px solid #3498db; font-size: 0.95em; }
         .lab-bench { display: flex; justify-content: space-around; padding: 20px; background: #fafafa; border-radius: 10px; margin-top: 20px; }
         .tube-container { display: flex; flex-direction: column; align-items: center; width: 180px; }
-        .tube { width: 50px; height: 180px; border: 2px solid #bdc3c7; border-top: none; border-radius: 0 0 25px 25px; position: relative; background: rgba(255,255,255,0.8); }
-        .liquid { position: absolute; bottom: 0; width: 100%; height: 0%; transition: height 1s; border-radius: 0 0 25px 25px; }
-        .nail { width: 6px; height: 120px; background: #95a5a6; position: absolute; bottom: 10px; left: 22px; transition: 2s; border-radius: 2px; }
-        .rust { background: #d35400 !important; filter: blur(2px); opacity: 0; transition: 3s; }
+        .tube { width: 50px; height: 180px; border: 2px solid #bdc3c7; border-top: none; border-radius: 0 0 25px 25px; position: relative; background: rgba(255,255,255,0.8); overflow: hidden; }
+        .liquid { position: absolute; bottom: 0; width: 100%; height: 60%; border-radius: 0 0 25px 25px; }
+        .nail { width: 8px; height: 130px; background: #95a5a6; position: absolute; bottom: 10px; left: 21px; transition: 2s; border-radius: 2px; border: 1px solid rgba(0,0,0,0.1); }
         .controls { text-align: center; margin: 20px 0; }
-        button { padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        button:hover { background: #2980b9; }
-        .report { margin-top: 25px; padding: 20px; border: 1px solid #3498db; border-radius: 10px; display: none; }
+        button { padding: 12px 25px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1.1em; transition: 0.3s; }
+        button:hover { background: #2980b9; transform: scale(1.05); }
+        .report { margin-top: 25px; padding: 20px; border: 2px solid #3498db; border-radius: 10px; display: none; background: #fff; }
+        .label-text { font-weight: bold; margin-top: 10px; font-size: 0.9em; }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="user-info">
         <label><b>Прізвище та Ім'я студента:</b></label><br><br>
-        <input type="text" id="studentName" placeholder="Введіть ваше ім'я..." oninput="checkName()">
+        <input type="text" id="studentName" placeholder="Введіть дані для доступу..." oninput="checkName()">
     </div>
     <div id="labWrapper" class="lab-content">
         <div class="intro-section">
             <h1>Дослід №1: Вплив середовища на швидкість корозії</h1>
             <div class="aim-box">
-                <strong>Мета:</strong> Дослідити, як вода, розчин солі та кислота впливають на залізний цвях.
+                <strong>Мета:</strong> Порівняти інтенсивність корозії заліза у дистильованій воді, розчині солі та кислоті.
             </div>
         </div>
         <div class="controls">
-            <button onclick="startLab()">Запустити дослід (через 3 дні...)</button>
+            <button id="startBtn" onclick="startLab()">Запустити реакцію (прискорити час)</button>
         </div>
         <div class="lab-bench">
             <div class="tube-container">
                 <div class="tube">
-                    <div class="liquid" style="height: 60%; background: rgba(52, 152, 219, 0.2);"></div>
+                    <div class="liquid" style="background: rgba(52, 152, 219, 0.15);"></div>
                     <div class="nail" id="nail1"></div>
                 </div>
-                <p>1. Вода</p>
+                <p class="label-text">1. Вода (H₂O)</p>
             </div>
             <div class="tube-container">
                 <div class="tube">
-                    <div class="liquid" style="height: 60%; background: rgba(52, 152, 219, 0.4);"></div>
+                    <div class="liquid" style="background: rgba(52, 152, 219, 0.3);"></div>
                     <div class="nail" id="nail2"></div>
                 </div>
-                <p>2. Розчин NaCl</p>
+                <p class="label-text">2. Розчин NaCl</p>
             </div>
             <div class="tube-container">
                 <div class="tube">
-                    <div class="liquid" style="height: 60%; background: rgba(231, 76, 60, 0.2);"></div>
+                    <div class="liquid" style="background: rgba(231, 76, 60, 0.1);"></div>
                     <div class="nail" id="nail3"></div>
                 </div>
-                <p>3. Розчин HCl</p>
+                <p class="label-text">3. Розчин HCl</p>
             </div>
         </div>
         <div class="report" id="report">
-            <h3>Звіт</h3>
-            <p>Спостереження: у якій пробірці корозія найсильніша?</p>
-            <div style="text-align: right; font-style: italic;">Виконав(ла): <span id="displayName"></span></div>
+            <h3>ЗВІТ З ДОСЛІДЖЕННЯ</h3>
+            <p><b>Ваші спостереження:</b></p>
+            <ul>
+                <li>Пробірка №1: Слабкий наліт іржі.</li>
+                <li>Пробірка №2: Значна корозія (сіль прискорює процес).</li>
+                <li>Пробірка №3: Виділення бульбашок газу та розчинення металу.</li>
+            </ul>
+            <div style="text-align: right; font-style: italic; border-top: 1px solid #eee; padding-top: 10px;">
+                Роботу виконав(ла): <span id="displayName" style="color: #2980b9; font-weight: bold;"></span>
+            </div>
         </div>
     </div>
 </div>
@@ -74,15 +81,21 @@
     function checkName() {
         const val = document.getElementById('studentName').value;
         if (val.trim().length >= 3) document.getElementById('labWrapper').classList.add('lab-active');
+        else document.getElementById('labWrapper').classList.remove('lab-active');
     }
     function startLab() {
-        document.getElementById('nail1').style.background = '#a04000';
-        document.getElementById('nail2').style.background = '#8e44ad'; // сильніша зміна
+        // Пробірка 1 - слабка іржа
+        document.getElementById('nail1').style.background = '#b87333';
+        // Пробірка 2 - сильна іржа
+        document.getElementById('nail2').style.background = '#8b4513';
+        document.getElementById('nail2').style.boxShadow = '0 0 15px #d35400';
+        // Пробірка 3 - хімічна реакція (сіріє)
         document.getElementById('nail3').style.background = '#7f8c8d';
-        // додаємо візуальну іржу
-        document.getElementById('nail2').style.boxShadow = '0 0 10px #d35400';
-        document.getElementById('report').style.display = 'block';
+        
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('startBtn').innerText = "Дослід завершено";
         document.getElementById('displayName').innerText = document.getElementById('studentName').value;
+        document.getElementById('report').style.display = 'block';
     }
 </script>
 </body>
